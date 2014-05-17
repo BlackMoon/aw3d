@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2630/trunk/fp10/Away3DLite/src/away3dlite/primitives
+END
+Plane.as
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/2417/trunk/fp10/Away3DLite/src/away3dlite/primitives/Plane.as
+END
+Cube6.as
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/Cube6.as
+END
+Cone.as
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/Cone.as
+END
+Skybox6.as
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/Skybox6.as
+END
+Sphere.as
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/2131/trunk/fp10/Away3DLite/src/away3dlite/primitives/Sphere.as
+END
+RegularPolygon.as
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/RegularPolygon.as
+END
+Cylinder.as
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/Cylinder.as
+END
+Trident.as
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/2630/trunk/fp10/Away3DLite/src/away3dlite/primitives/Trident.as
+END
+LineSegment.as
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2049/trunk/fp10/Away3DLite/src/away3dlite/primitives/LineSegment.as
+END
+AbstractPrimitive.as
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/AbstractPrimitive.as
+END
+Torus.as
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/primitives/Torus.as
+END

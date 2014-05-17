@@ -1,0 +1,162 @@
+10
+
+dir
+3318
+http://away3d.googlecode.com/svn/trunk/fp10/Away3D/src/away3d
+http://away3d.googlecode.com/svn
+
+
+
+2011-04-07T01:54:28.984671Z
+3126
+rob.bateman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6da1ee2c-932f-0410-8bb4-73b2b089c45a
+
+test
+dir
+
+modifiers
+dir
+
+materials
+dir
+
+physics
+dir
+
+extrusions
+dir
+
+graphs
+dir
+
+away3d-license.txt
+file
+
+
+
+
+2011-08-20T20:23:47.921875Z
+f4c21449a8d4ee5b93188a62539c2137
+2008-04-15T09:38:35.010634Z
+458
+rob.bateman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+560
+
+debug
+dir
+
+core
+dir
+
+sprites
+dir
+
+loaders
+dir
+
+lights
+dir
+
+arcane.as
+file
+
+
+
+
+2011-08-20T20:23:47.921875Z
+8fac928dbdc142c635195433d9f6870e
+2008-10-20T00:40:03.846075Z
+756
+rob.bateman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+48
+
+exporters
+dir
+
+primitives
+dir
+
+animators
+dir
+
+pbks
+dir
+
+tools
+dir
+
+audio
+dir
+
+overlays
+dir
+
+events
+dir
+
+containers
+dir
+
+cameras
+dir
+
+dev
+dir
+

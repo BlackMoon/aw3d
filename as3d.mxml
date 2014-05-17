@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:ns1="*" frameRate="30" layout="absolute"
+				width="640" height="480" creationComplete="{init()}">				
+	<fx:Script>
+		<![CDATA[
+			import away3d.cameras.Camera3D;
+			import away3d.containers.ObjectContainer3D;
+			import away3d.containers.View3D;
+			import away3d.core.base.Face;
+			import away3d.core.base.Mesh;
+			import away3d.core.math.Quaternion;
+			import away3d.lights.DirectionalLight3D;
+			import away3d.loaders.Loader3D;
+			import away3d.loaders.Max3DS;
+			import away3d.loaders.data.MaterialData;
+			import away3d.materials.WireColorMaterial;
+			import away3d.materials.WireframeMaterial;
+			import away3d.primitives.Trident;
+			import mx.utils.StringUtil;			
+			// const
+			private static const ANGLE:Number = 0.3;
+			private static const COS:Number = Math.cos(ANGLE * Math.PI / 360);
+			private static const SIN:Number = Math.sin(ANGLE * Math.PI / 360);
+			private static const HOME:String = "models";
+			// variables
+			private var _auto:Boolean = false;				// auto rotate
+			private var _drag:Boolean = false;			
+			private var _wire:Boolean = false;			
+			private var cam:Camera3D;
+			private var fg:FACEGEOM;
+			[Bindable]		
+			private var loader:Loader3D;					// loader for model			
+			private var model:ObjectContainer3D;
+			private var _view:View3D;
+			private var wfMat:WireframeMaterial;
+			[Bindable]
+			private var wireColor:uint = 0x00ff00;			
+			private var qdown:Quaternion = new Quaternion();
+			private var qnow:Quaternion = new Quaternion();			
+			private var _m16:Vector.<Number> = new Vector.<Number>(16, true);			
+			private var vfrom:Vector3D;
+			
+			public function init():void
+			{			
+				// flashvars			
+				var mod_ext:String;							// model extension (3ds, obj, etc.)
+				var mod_name:String;						// model name				
+				if (parameters.hasOwnProperty("model")) 	mod_name = parameters.model;					
+				if (parameters.hasOwnProperty("ext")) 		mod_ext = parameters.ext;	
+				if (parameters.hasOwnProperty("backcolor")) setStyle("backgroundColor", parameters.backcolor);				
+				if (parameters.hasOwnProperty("wirecolor")) wireColor = parameters.wirecolor;				
+				// model loading
+				var max3ds:Max3DS = new Max3DS({centerMeshes:true});
+				loader = new Loader3D();
+				loader.loadGeometry(StringUtil.substitute("{0}/{1}/{1}.{2}", HOME, mod_name, mod_ext), max3ds);	
+				loader.addOnError(onError);								
+				loader.addOnSuccess(onSuccess);
+				
+				cam = new Camera3D({zoom:3});				
+				_view = aw3d.view;				
+				_view.camera = cam;				
+				// default rotate angle
+				qdown.x = qnow.x = 0;
+				qdown.y = qnow.y = Math.SQRT1_2;
+				qdown.z = qnow.z = 0;
+				qdown.w = qnow.w = Math.SQRT1_2;				
+				// handlers					
+				addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove); 
+				addEventListener(MouseEvent.MOUSE_UP, onMouseUp);				
+				addEventListener(Event.ENTER_FRAME, Render);
+				wfMat = new WireframeMaterial(wireColor);				
+			}
+			
+			private function mouseDrag(nx:int, ny:int):void
+			{	
+				var vto:Vector3D = mouseOnSphere(nx, ny);				
+				var vprod:Vector3D = vfrom.crossProduct(vto);
+				var q:Quaternion = new Quaternion();
+				qnow.x = vprod.x;
+				qnow.y = vprod.y;
+				qnow.z = vprod.z;
+				qnow.w = vfrom.dotProduct(vto);
+				qnow.multiply(qnow, qdown);
+				
+				_m16[0] = 1 - 2 * (qnow.y * qnow.y + qnow.z * qnow.z);	
+				_m16[1] = 2 * (qnow.x * qnow.y + qnow.z * qnow.w);		
+				_m16[2] = 2 * (qnow.x * qnow.z - qnow.y * qnow.w);
+				_m16[4] = 2 * (qnow.x * qnow.y - qnow.z * qnow.w);
+				_m16[5] = 1 - 2 * (qnow.x * qnow.x + qnow.z * qnow.z);
+				_m16[6] = 2 * (qnow.y * qnow.z + qnow.x * qnow.w);
+				_m16[8] = 2 * (qnow.x * qnow.z + qnow.y * qnow.w);
+				_m16[9] = 2 * (qnow.y * qnow.z - qnow.x * qnow.w);
+				_m16[10] = 1 - 2 * (qnow.x * qnow.x + qnow.y * qnow.y);				
+				model.transform = new Matrix3D(_m16);				
+			}
+			
+			private function mouseOnSphere(nx:int, ny:int):Vector3D
+			{				
+				var v:Vector3D = new Vector3D((aw3d.height / 2 - ny) / aw3d.radius, (nx - aw3d.width / 2)  / aw3d.radius, 0);				
+				var sqlen:Number = v.lengthSquared;	
+				if (sqlen > 1) v.normalize();	
+				else v.z = Math.sqrt(1 - sqlen);
+				return v;
+			}			
+			
+			protected function onError(e:Event):void
+			{
+				lbInfo.text = "Не удалось загрузить модель\n";				
+				if (Capabilities.isDebugger) 
+				{
+					lbInfo.height *= 2;
+					lbInfo.text += loader.IOErrorText; 
+				}
+				lbInfo.visible = true;				
+				progress.visible = false;
+			}
+			
+			
+			protected function onMouseDown(e:MouseEvent):void
+			{
+				var isAW3D:Boolean = !(e.target is Label || e.target is Button);				
+				if (isAW3D && model)
+				{
+					_drag = true;
+					vfrom = mouseOnSphere(e.stageX, e.stageY);
+				}				
+			}	
+			
+			protected function onMouseMove(e:MouseEvent):void
+			{
+				if (_drag) mouseDrag(e.stageX, e.stageY);				
+			}
+			
+			protected function onMouseUp(e:MouseEvent):void
+			{				
+				var isAW3D:Boolean = !(e.target is Label || e.target is Button);
+				if (isAW3D && _drag) 
+				{	
+					qdown.x = qnow.x;
+					qdown.y = qnow.y; 
+					qdown.z = qnow.z;
+					qdown.w = qnow.w;
+					_drag = false;
+				}				
+			}			
+			
+			protected function onSuccess(e:Event):void
+			{
+				model = e.target.handle as ObjectContainer3D;				
+				
+				fg = new FACEGEOM(model);				
+				var v:Vector3D = fg.centerPt;
+				var d:Number = fg.diametr;
+				// axis only in debugger mode
+				if (Capabilities.isDebugger) _view.scene.addChild(new Trident(d/2));	
+				// cam position & up X_AXIS					
+				_m16[0] = _m16[2] = _m16[3] = _m16[5] = _m16[6] = _m16[7] = _m16[8] = _m16[9] = _m16[11] = _m16[12] = _m16[13]= 0;
+				_m16[1] = _m16[4] = _m16[15] = 1;
+				_m16[10] = -1;				
+				_m16[14] = d;				
+				cam.transform = new Matrix3D(_m16);	
+				// initial move to (0, 0, 0) and rotate
+				_m16[0] = _m16[1] = _m16[3] = _m16[4] = _m16[6] = _m16[7] = _m16[9] = _m16[10] = _m16[11] = 0;
+				_m16[5] = _m16[8] = _m16[15] = 1;
+				_m16[2] = -1;					
+				_m16[12] = -v.x;
+				_m16[13] = -v.y;
+				_m16[14] = -v.z;
+				model.transform = new Matrix3D(_m16);				
+				_view.scene.addChild(model);
+				// controls
+				btnRot.enabled = btnWire.enabled = true;
+				progress.visible = false;
+			}	
+			
+			protected function Render(e:Event):void
+			{				
+				if (_auto)	// rotate about local Z_AXIS 
+				{					
+					qdown.w = qdown.w * COS - qdown.z * SIN; 
+					qdown.x = qdown.x * COS + qdown.y * SIN;
+					qdown.y = qdown.y * COS - qdown.x * SIN;
+					qdown.z = qdown.w * SIN + qdown.z * COS;					
+					model.rotate(Vector3D.Z_AXIS, ANGLE);
+				}	
+				_view.render();
+			}				
+			
+			protected function btnInfo_click(e:MouseEvent):void
+			{
+				lbInfo.visible = !lbInfo.visible;
+			}
+			
+			protected function btnRot_click(e:MouseEvent):void
+			{
+				_auto = !_auto;				
+			}		
+			
+			protected function btnWire_click(event:MouseEvent):void
+			{				
+				_wire = !_wire;
+				var child:Mesh;
+				var face:Face;
+				if (_wire)
+				{
+					for each (child in model.children)
+					{
+						for each (face in child.faces)
+						{							
+							face.material = wfMat;		
+						}
+					}
+				}
+				else
+				{
+					var index:uint = 0;
+					for each (child in model.children)
+					{						
+						for each (face in child.faces)
+						{							
+							face.material = fg.faceMaterial(index);
+							index++;
+						}
+					}
+				}
+			}
+		]]>
+	</fx:Script>	
+	<mx:ProgressBar id="progress" height="12" label="Загрузка модели %3%%" alpha="0.5"
+					fontSize="11" fontWeight="normal" horizontalCenter="0" labelPlacement="center"
+					mode="polled" verticalCenter="0" source = "{loader}"/>	
+	<ns1:aw3dContainer id="aw3d" horizontalCenter="0" verticalCenter="0"/>
+	<mx:Label id="lbInfo" visible="false" left="0" bottom="0" width="480" height="18"
+			  color="{wireColor}" fontFamily="Verdana" fontSize="12" fontWeight="bold"
+			  text="для поворота используйте LMouse"/>	
+	<mx:Button id="btnRot" right="68" bottom="0" width="32" height="32" label="Автовращение"
+			   alpha="1" click="btnRot_click(event)" cornerRadius="2" enabled="false"
+			   icon="@Embed(source='assets/rot.png')" toggle="true"/>
+	<mx:Button id="btnWire" right="34" bottom="0" width="32" height="32" label="Каркас" alpha="1"
+			   click="btnWire_click(event)" cornerRadius="2" enabled="false"
+			   icon="@Embed(source='assets/wire.png')" toggle="true"/> 
+	<mx:Button id="btnInfo" right="0" bottom="0" width="32" height="32" label="Информация" alpha="1"
+			   click="btnInfo_click(event)" cornerRadius="2" icon="@Embed(source='assets/info.png')"
+			   selected="false" toggle="true"/>	
+</mx:Application>

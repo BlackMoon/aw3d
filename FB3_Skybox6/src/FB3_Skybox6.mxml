@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" addedToStage="init()" frameRate="30">
+	<mx:Script>
+		<![CDATA[
+		import away3d.materials.WireColorMaterial;
+		import away3d.primitives.Skybox6;
+		import mx.controls.Alert;
+		import away3d.primitives.Plane;
+		import mx.messaging.channels.StreamingAMFChannel;
+		import mx.collections.ArrayCollection;
+		import away3d.core.utils.Cast;
+		import away3d.primitives.Sphere;
+		
+		// Imports
+		import mx.core.UIComponent;
+		import away3d.cameras.HoverCamera3D;
+		import away3d.containers.Scene3D;
+		import away3d.containers.View3D;
+		import away3d.debug.AwayStats;
+		import away3d.materials.BitmapMaterial;
+		
+		import mx.managers.SystemManager;
+		
+		// Var ini
+		private var sm:SystemManager;
+			
+		private var scene:Scene3D;
+		private var camera:HoverCamera3D;
+		private var view:View3D;
+		private var mat:BitmapMaterial;
+		private var primitive:Skybox6;
+		
+		private var bMove:Boolean = false;
+		private var lastPanAngle:Number;
+		private var lastTiltAngle:Number;
+		private var lastMouseX:Number;
+		private var lastMouseY:Number;
+		
+		private var bShiftKeyDown:Boolean = false;
+		
+		
+		// when app creation complete this is executed(see mx:application tag)
+		public function init():void {
+			// Setup system manager
+			sm = new SystemManager();
+			
+			// Setup Away3D
+			scene = new Scene3D();
+			camera = new HoverCamera3D({zoom:10, focus:40});
+			camera.minTiltAngle = -20;
+			camera.maxTiltAngle = 20;
+			camera.panAngle = 90;
+			camera.tiltAngle = 0;
+			
+			camera.zoom = 11;
+			camera.focus = 50;
+			
+			view = new View3D({scene:scene, camera:camera,x:400,y:400});
+			
+			// Attach Away3D view to its container
+			away3dContainer.addChild(view);
+						
+			// Setup panormaic sphere primitive
+			var mat:WireColorMaterial = new WireColorMaterial(0xFFCC00);
+			this.primitive = new Skybox6(mat);
+			
+			// Attach primitive to the Away3D view
+			this.view.scene.addChild(this.primitive);
+			
+			// Add Away3D stats
+			var awaystats:AwayStats = new AwayStats();
+			awaystats.x = 10;
+			awaystats.y = 10;
+			away3dContainer.addChild(awaystats);
+			
+			// Update zoom and focus labels
+			updateZoomAndFocus();
+			
+			// Load default texture
+			loadDefaultTexture();
+			
+			// Init listeners
+			initListeners();
+			
+			
+		}
+		
+		
+		// Event listeners
+		private function initListeners():void
+		{
+			this.addEventListener( Event.ENTER_FRAME, onEnterFrame );
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			
+			this.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheelEvent);
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+			this.stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
+			
+			this.addEventListener(Event.RESIZE,handleBrowserResize);
+			handleBrowserResize(null);
+		}
+		
+		
+		
+		// Function to update zoom and focus text labels
+		private function updateZoomAndFocus():void
+		{
+			this.txtZoom.text = "Camera zoom = " + this.camera.zoom.toString();
+			this.txtFocus.text = "Camera focus = " + this.camera.focus.toString();
+		}
+		
+		
+		
+		// Browser resize handler
+		private function handleBrowserResize(e:Event=null):void
+		{
+			this.view.x = stage.stageWidth/2;
+			this.view.y = stage.stageHeight/2;
+		}
+		
+		
+		// Enter frame handler (render and camera setup)
+		private function onEnterFrame(event:Event):void
+		{
+			if (bMove) {
+				camera.panAngle = 0.3 * (sm.mouseX - lastMouseX) + lastPanAngle;
+				camera.tiltAngle = 0.3 * (sm.mouseY - lastMouseY) + lastTiltAngle;
+			}
+			
+			
+			camera.hover();  
+			view.render();
+		}
+		
+		
+		
+		// Mouse down handler
+		private function onMouseDown(event:MouseEvent):void
+		{
+			lastPanAngle = camera.panAngle;
+			lastTiltAngle = camera.tiltAngle;
+			lastMouseX = stage.mouseX;
+			lastMouseY = stage.mouseY;
+			bMove = true;
+			this.addEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);
+		}
+		
+		
+		
+		// Mouse up handler
+		private function onMouseUp(event:MouseEvent):void
+		{
+			bMove = false;
+			sm.removeEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);     
+		}
+		
+		
+		
+		// Mouse leave stage handler
+		private function onStageMouseLeave(event:Event):void
+		{
+			bMove = false;
+			sm.removeEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);     
+		}
+		
+		
+		
+		
+		
+		// Mouse wheel handler
+		private function onMouseWheelEvent(e:MouseEvent=null):void{
+			if (e.delta < 0){
+				if (bShiftKeyDown){
+					camera.focus = camera.focus - 1;
+				} else {
+					camera.zoom = camera.zoom - 1;
+				}
+			} else {
+				if (bShiftKeyDown){
+					camera.focus = camera.focus + 1;
+				} else {
+					camera.zoom = camera.zoom + 1;	
+				}
+			}
+			
+			// Populate zoom and focus text fields
+			updateZoomAndFocus();
+		}
+		
+		// Keyboard handler key down
+		private function handleKeyDown(e:KeyboardEvent = null):void{
+			if (e.shiftKey){
+				bShiftKeyDown = true;
+			} 
+		}
+		
+		// Keyboard handler key up
+		private function handleKeyUp(e:KeyboardEvent = null):void{
+				bShiftKeyDown = false;
+		}
+		
+		
+		
+		// Data for teture drop down
+		[Bindable]
+            public var texturesArray:ArrayCollection = new ArrayCollection(
+            [ {label:"Texture 1", data:"http://www.allforthecode.co.uk/aftc/forum/article_dev/away3d/FB3_Skybox6/assets/1.jpg"}, 
+              {label:"Texture 2", data:"http://www.allforthecode.co.uk/aftc/forum/article_dev/away3d/FB3_Skybox6/assets/2.jpg"}, 
+              {label:"Texture 3", data:"http://www.allforthecode.co.uk/aftc/forum/article_dev/away3d/FB3_Skybox6/assets/3.jpg"},
+              {label:"Texture 4", data:"http://www.allforthecode.co.uk/aftc/forum/article_dev/away3d/FB3_Skybox6/assets/4.jpg"},
+              {label:"Texture 5", data:"http://www.allforthecode.co.uk/aftc/forum/article_dev/away3d/FB3_Skybox6/assets/5.jpg"}, 
+            ]);
+              
+       
+        
+        // Function for selected item in drop down handler
+        private function switchTexture(e:Event):void{
+        	//ComboBox(e.target).selectedItem.label;
+			//ComboBox(e.target).selectedItem.data;
+			
+			loadTexture(ComboBox(e.target).selectedItem.data);
+        }
+        
+        
+        // Preload texture
+        private function loadTexture(sURL:String):void{
+        	var pictLdr:Loader = new Loader();
+         	var pictURLReq:URLRequest = new URLRequest(sURL);
+         	pictLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, handleFileLoadComplete);
+         	pictLdr.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS,handleLoadingProgress);
+         	pictLdr.load(pictURLReq);
+         	progressBar.visible = true;
+        }
+        
+        
+        
+        // Handle preloading
+        private function handleLoadingProgress(e:ProgressEvent):void
+        {
+        	var iPercentLoaded:int=e.bytesLoaded/e.bytesTotal*100;
+        	progressBar.setProgress(iPercentLoaded,100);
+        	//trace(iPercentLoaded);
+        }
+        
+        
+        
+        // Handle file loaded
+		private function handleFileLoadComplete(e:Event):void
+		{
+			this.primitive.material = new BitmapMaterial(Cast.bitmap(e.target.content))
+			progressBar.visible = false;
+		}
+        
+        
+        
+        // load default texture function
+        private function loadDefaultTexture():void
+        {
+        	loadTexture("http://www.allforthecode.co.uk/aftc/forum/article_dev/away3d/FB3_Skybox6/assets/1.jpg");
+        }
+        
+        
+        // Clear texture button click handler
+        private function clearTexture():void
+        {
+        	this.primitive.material = null;
+        }
+        
+        
+        ]]>
+	</mx:Script>
+	
+	
+	
+	
+	
+	
+	<mx:Style>
+		.pannelMessage {
+			background-color: #FFFFFF;
+			background: #FFFFFF;
+			font-size: 16;
+			font-weight: bold;
+			color: #000000;
+			backgroundColor: #FFFFFF;
+		}
+	</mx:Style>
+	
+	<mx:UIComponent id="away3dContainer" visible="true"/>
+	<mx:Label x="10" bottom="30" text="Darcey.Lloyd@gmail.com developer code snippets" fontSize="14" fontWeight="bold" visible="true"/>
+	<mx:Label x="10" bottom="10" text="Use mouse wheel and shift mouse wheel to control focus and zoom" fontSize="14" fontWeight="bold" visible="true"/>
+	<mx:Label x="10" bottom="149" text="Camera focus =" fontSize="14" fontWeight="bold" visible="true" id="txtFocus"/>
+	<mx:Label x="10" bottom="180" text="Camera Zoom =" fontSize="14" fontWeight="bold" visible="true" id="txtZoom"/>
+	<mx:ComboBox right="10" y="10" id="textures" dataProvider="{texturesArray}" close="switchTexture(event)"></mx:ComboBox>
+	<mx:ProgressBar horizontalCenter="0" verticalCenter="0" width="200" mode="manual" id="progressBar"/>
+	<mx:Button label="clear texture" horizontalCenter="0" top="10" click="clearTexture()"/>
+	
+	
+	
+	
+	
+</mx:Application>

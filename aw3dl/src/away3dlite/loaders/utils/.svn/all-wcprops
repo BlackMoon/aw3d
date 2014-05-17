@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils
+END
+ChannelLibrary.as
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils/ChannelLibrary.as
+END
+GeometryLibrary.as
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1630/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils/GeometryLibrary.as
+END
+MaterialLibrary.as
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1829/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils/MaterialLibrary.as
+END
+AnimationLibrary.as
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1719/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils/AnimationLibrary.as
+END
+TextureLoadQueue.as
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1630/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils/TextureLoadQueue.as
+END
+TextureLoader.as
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1630/trunk/fp10/Away3DLite/src/away3dlite/loaders/utils/TextureLoader.as
+END

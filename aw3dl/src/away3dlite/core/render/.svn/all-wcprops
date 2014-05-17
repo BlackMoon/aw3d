@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/core/render
+END
+FastRenderer.as
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/2064/trunk/fp10/Away3DLite/src/away3dlite/core/render/FastRenderer.as
+END
+Renderer.as
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/core/render/Renderer.as
+END
+BasicRenderer.as
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/2107/trunk/fp10/Away3DLite/src/away3dlite/core/render/BasicRenderer.as
+END

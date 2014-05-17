@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/data
+END
+BoneData.as
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/1719/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/BoneData.as
+END
+ObjectData.as
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/ObjectData.as
+END
+ChannelData.as
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/ChannelData.as
+END
+GeometryData.as
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/GeometryData.as
+END
+MeshMaterialData.as
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1698/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/MeshMaterialData.as
+END
+MeshData.as
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/MeshData.as
+END
+MaterialData.as
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1970/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/MaterialData.as
+END
+FaceData.as
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/1630/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/FaceData.as
+END
+AnimationData.as
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/AnimationData.as
+END
+ContainerData.as
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/data/ContainerData.as
+END

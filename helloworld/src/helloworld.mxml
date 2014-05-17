@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/halo"
+			   xmlns:mx2="library://ns.adobe.com/flex/mx"
+			   creationComplete="init()" xmlns:local="*">
+//			   width="608" height="434" creationComplete="initApp()" currentState="State1" xmlns:local="*"> 
+	<fx:Style source="helloworld.css"/>
+	
+	
+	<fx:Script>
+		<![CDATA[
+		import away3d.materials.TransformBitmapMaterial;
+		import mx.logging.Log;
+		import away3d.materials.WireColorMaterial;
+		import away3d.materials.ColorMaterial;
+		import away3d.primitives.Sphere;
+		
+		private var ball:Sphere;
+		
+		[Embed(source="./fx_appicon.jpg")]
+		private var flexLogo:Class;
+		
+		// Adds a ball to the 3D view and sets up rendering
+		public function init():void
+		{
+			var flexImage:Bitmap = new flexLogo() as Bitmap;
+			var flexMaterial:TransformBitmapMaterial = new TransformBitmapMaterial( flexImage.bitmapData, {scaleX:0.1, scaleY:0.1, repeat:true, smooth:true} );
+			
+			ball = new Sphere({material:"orange#black"});
+			ball.material = flexMaterial;
+			ball.radius = 300;
+			ball.segmentsH = 25;
+			ball.segmentsW = 25;
+			//away.view.scene.addChild( ball );
+			this.addEventListener(Event.ENTER_FRAME, render);
+		}
+		
+		// makes the 3D component render on each frame
+		public function render(e:Event):void
+		{
+		ball.rotationX += 0.5;
+		ball.rotationY += 0.8;
+		away.view.render();
+		}
+		
+		// patches the Flex omission of smoothing for Image containers
+		public function fix(event:Event):void
+		{
+		var imgControl:Image = event.currentTarget as Image;
+		var image:Bitmap=imgControl.content as Bitmap;
+		image.smoothing = true; 
+		}
+		]]>
+	</fx:Script>
+	<s:VSlider height="211"/>
+	<!--<mx:HDividedBox id="box" top="5" right="5" bottom="5" left="5" borderStyle="solid" borderColor="#999999" minWidth="100" minHeight="100">
+	//	<ns1:AwayView id="away" width="200"/>
+	//	<mx:Image source="@Embed('./away3d_logo_white.jpg')" maxHeight="{box.height-5}" scaleContent="true" creationComplete="{fix(event)}"/>
+	</mx:HDividedBox>
+	-->
+	<!--<fx:Script> 
+		<![CDATA[ 
+			import mx.controls.Alert;
+			import spark.events.TextOperationEvent;
+			
+			private var myGreeter:greeter = new greeter(); 
+			
+			public function initApp():void 
+			{ 
+				// says hello at the start, and asks for the user's name 
+				mainTxt.text = myGreeter.sayHello(); 
+			} 
+			
+			protected function mainTxt_changeHandler(event:TextOperationEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function mainTxt_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				Alert.show("changed!", "alert");
+			}
+			
+		]]> 
+	</fx:Script> 
+	
+	<s:layout> 
+		<s:VerticalLayout/> 
+	</s:layout> 
+	<s:states>
+		<s:State name="State1"/>
+	</s:states>
+	<s:TextArea id="mainTxt" width="400" click="mainTxt_clickHandler(event)" color="#DDDDDD"
+				editable="true"/>     
+	
+	<s:HGroup width="400" height="19" verticalAlign="middle">     
+		<s:Label text="User name:"/>
+		    
+		<s:TextInput id="userNameTxt" width="100%" height="18"
+					 enter="mainTxt.text = myGreeter.sayHello(userNameTxt.text);"/> 
+	</s:HGroup> 
+	<mx2:HRule width="663" height="0"/>
+	-->
+	
+</s:Application>

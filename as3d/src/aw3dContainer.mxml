@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:UIComponent xmlns:fx="http://ns.adobe.com/mxml/2009" 				
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				width="100%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import away3d.containers.View3D;
+			import away3d.core.clip.RectangleClipping;
+			import away3d.core.render.Renderer;
+			
+			public var radius:Number = 0;
+			public var view:View3D;	
+			
+			override protected function createChildren():void
+			{
+				super.createChildren();
+				view = new View3D();
+				view.addEventListener(Event.ADDED_TO_STAGE, update, false, 0, true); 	// Make sure the first frame is rendered
+				addChild(view);				
+			}
+			
+			override protected function updateDisplayList(unscaledWidth: Number, unscaledHeight: Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				update();
+			}
+			
+			private function update(e:* = null):void
+			{
+				if (view.stage) {
+					view.x = unscaledWidth / 2;
+					view.y = unscaledHeight / 2;
+					view.clipping = new RectangleClipping({minX: - unscaledWidth / 2, minY: - unscaledHeight / 2, 
+						maxX: unscaledWidth / 2, maxY : unscaledHeight / 2});
+					radius = Math.sqrt(unscaledWidth * unscaledWidth + unscaledHeight * unscaledHeight) / 2;					
+					view.render();
+				}
+			}
+		]]>
+	</fx:Script>
+</mx:UIComponent>

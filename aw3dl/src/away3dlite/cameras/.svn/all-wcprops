@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2615/trunk/fp10/Away3DLite/src/away3dlite/cameras
+END
+Camera3D.as
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/2615/trunk/fp10/Away3DLite/src/away3dlite/cameras/Camera3D.as
+END
+HoverCamera3D.as
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/2313/trunk/fp10/Away3DLite/src/away3dlite/cameras/HoverCamera3D.as
+END
+TargetCamera3D.as
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2107/trunk/fp10/Away3DLite/src/away3dlite/cameras/TargetCamera3D.as
+END

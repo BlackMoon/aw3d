@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:ns1="*"
+			   backgroundColor="#f0F0f0" creationComplete="{init()}" frameRate="30">	
+	
+	<fx:Script>
+		<![CDATA[
+			import away3d.cameras.Camera3D;
+			import away3d.containers.ObjectContainer3D;
+			import away3d.containers.View3D;
+			import away3d.core.math.Matrix3DUtils;
+			import away3d.core.math.Quaternion;
+			import away3d.core.utils.Debug;
+			import away3d.loaders.Loader3D;
+			import away3d.loaders.Max3DS;
+			import away3d.loaders.data.MaterialData;
+			import away3d.materials.WireframeMaterial;
+			import away3d.primitives.Trident;
+			
+			import spark.components.ToggleButton;
+			// variables
+			private var _autoMove:Boolean = false;
+			private var _drag:Boolean = false;
+			private var _wire:Boolean = false;
+			private	var matLib:Object = new Object();
+			private var cam:Camera3D;
+			private var loader:Loader3D;
+			private var model:ObjectContainer3D;
+			private var _pt:Point;
+			private var _view:View3D;			
+			private var qdown:Quaternion = new Quaternion();
+			private var qnow:Quaternion = new Quaternion();
+			private var vfrom:Vector3D;
+			private var wfMat:WireframeMaterial;
+			private var _m16:Vector.<Number> = new Vector.<Number>(16, true);			
+			
+			public function init():void
+			{
+				cam = new Camera3D({focus:180, zoom:2});
+				_view = aw3d.view;
+				_view.camera = cam;
+				
+				wfMat = new WireframeMaterial(0xff00ff, {thickness:1});				
+				 
+				// default rotation
+				qdown.x = qnow.x = 0;
+				qdown.y = qnow.y = -Math.SQRT1_2;
+				qdown.z = qnow.z = 0;
+				qdown.w = qnow.w = Math.SQRT1_2;				
+				// aw3d handlers
+				addEventListener(Event.ENTER_FRAME, Render);
+				addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove); 
+				addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			}
+			
+			private function mouseDrag(nx:int, ny:int):void
+			{
+				var vto:Vector3D = mouseOnSphere(nx, ny);				
+				var vprod:Vector3D = vfrom.crossProduct(vto);
+				var q:Quaternion = new Quaternion();
+				q.x = vprod.x;
+				q.y = vprod.y;
+				q.z = vprod.z;
+				q.w = vfrom.dotProduct(vto);
+				qnow.multiply(q, qdown);
+				
+				//_m16[3] = _m16[7] = _m16[11] = _m16[12] = _m16[13] = _m16[14] = 0;
+				
+				_m16[0] = 1 - 2 * (qnow.y * qnow.y + qnow.z * qnow.z);	
+				_m16[1] = 2 * (qnow.x * qnow.y + qnow.z * qnow.w);		
+				_m16[2] = 2 * (qnow.x * qnow.z - qnow.y * qnow.w);
+				_m16[4] = 2 * (qnow.x * qnow.y - qnow.z * qnow.w);
+				_m16[5] = 1 - 2 * (qnow.x * qnow.x + qnow.z * qnow.z);
+				_m16[6] = 2 * (qnow.y * qnow.z + qnow.x * qnow.w);
+				_m16[8] = 2 * (qnow.x * qnow.z + qnow.y * qnow.w);
+				_m16[9] = 2 * (qnow.y * qnow.z - qnow.x * qnow.w);
+				_m16[10] = 1 - 2 * (qnow.x * qnow.x + qnow.y * qnow.y);
+				//_m16[12] = _m16[13] = _m16[14] = 0;
+				
+				model.transform = new Matrix3D(_m16);				
+			}
+			
+			private function mouseOnSphere(nx:int, ny:int):Vector3D
+			{
+				var v:Vector3D = new Vector3D((aw3d.height / 2 - ny) / aw3d.radius, 
+											  (aw3d.width / 2 - nx)  / aw3d.radius, 0);				
+				var sqlen:Number = v.lengthSquared;				
+				
+				if (sqlen > 1) v.normalize();	
+				else v.z = Math.sqrt(1 - sqlen);
+				return v;
+			}		
+						
+			private function onError(e:Event):void
+			{
+				progress.visible = false;
+			}
+			
+			protected function onMouseDown(e:MouseEvent):void
+			{
+				if (model)
+				{
+					_drag = true;
+					vfrom = mouseOnSphere(e.stageX, e.stageY);
+				}				
+			}	
+			
+			protected function onMouseMove(e:MouseEvent):void
+			{
+				if (_drag) mouseDrag(e.stageX, e.stageY);				
+			}
+			
+			protected function onMouseUp(e:MouseEvent):void
+			{				
+				if (_drag) 
+				{	
+					qdown.x = qnow.x;
+					qdown.y = qnow.y; 
+					qdown.z = qnow.z;
+					qdown.w = qnow.w;
+					_drag = false;
+				}				
+			}
+			
+			private function onSuccess(e:Event):void
+			{
+				model = e.target.handle as ObjectContainer3D;
+				// model position
+				var geom:GEOM = new GEOM();
+				geom.bounds(model);				
+				var v:Vector3D = geom.centerPt();
+				v.negate();
+				// move model center to (0, 0, 0) 
+				_m16[0] = _m16[5] = _m16[10] = _m16[15] = 1;				
+				_m16[12] = v.x;
+				_m16[13] = v.y;
+				_m16[14] = v.z;
+				
+				model.transform = away3d.core.math.Matrix3DUtils.quaternion2matrix(qdown);
+				model.transform.position = v;
+				//model.transform.rawData = _m16;			
+				// cam position & up
+				/*_m16[0] = _m16[5] = _m16[10] = _m16[13] = _m16[14] = 0;
+				_m16[1] = _m16[8] = -1;				
+				_m16[6] = _m16[15] = 1;	
+				_m16[14] = -geom.radius();							
+				cam.transform.rawData = _m16;*/
+				
+				
+				cam.z = -geom.radius();
+				cam.lookAt(new Vector3D, new Vector3D(-1, 0, 0));				
+				// materials
+				for each(var md:MaterialData in model.materialLibrary)
+				{
+					matLib[md.name] = md;	
+				}	
+				_view.scene.addChild(model);
+				progress.visible = false;
+			}
+			/////////////////////////////////////
+			private function Render(e:Event):void
+			{
+				if (model && _autoMove) model.rotate(Vector3D.Z_AXIS, 0.3); 				
+				_view.render();
+				lbHelp.text = qdown.toString();//model.transform.rawData.toString();
+			}						
+			/////////////////////////////////////
+			protected function btnMove_click(e:MouseEvent):void
+			{
+				_autoMove = !_autoMove;				
+			}			
+			
+			protected function btnHelp_click(e:MouseEvent):void
+			{
+				lbHelp.visible = !lbHelp.visible;	
+				_wire = !_wire;
+				if (_wire)
+				{
+					for each(var md:MaterialData in model.materialLibrary)
+					{
+						md.material = wfMat;
+					}
+				}				
+			}
+			
+			protected function btnWire_click(event:MouseEvent):void
+			{				
+				var max3ds:Max3DS = new Max3DS({centerMeshes:true});
+								
+				loader = new Loader3D();
+				progress.source = loader;
+				progress.visible = true;
+				
+				//loader.loadGeometry("d:/dev/flex/3DS MAX/cup2.3ds", max3ds);				
+				loader.loadGeometry("d:/dev/flex/3DS MAX/BUGATTI1.3ds", max3ds);
+				//loader.loadGeometry("d:/dev/flex/3DS MAX/plane.3ds", max3ds);
+				loader.addOnError(onError);								
+				loader.addOnSuccess(onSuccess);				
+			}			
+		]]>	
+	</fx:Script>
+	
+	<ns1:aw3dContainer id="aw3d" horizontalCenter="0" verticalCenter="0"/>
+	<mx:ProgressBar id="progress" visible="false" label="%3" alpha="0.5" fontSize="11"
+					fontWeight="normal" horizontalCenter="0" mode="polled" verticalCenter="0"/>
+	<s:ToggleButton id="btnMove" right="45" bottom="0" width="42" height="42" label="Move"
+					alpha="0.5" click="btnMove_click(event)" selected="false"/>
+	<s:ToggleButton id="btnWire" right="0" bottom="45" width="42" height="42" label="Wire"
+					alpha="0.5" click="btnWire_click(event)" cornerRadius="0"
+					icon="@Embed(source='assets/48x48-update.png')"/>
+	<s:ToggleButton id="btnHelp" right="0" bottom="0" width="42" height="42" label="Help"
+					alpha="0.5" click="btnHelp_click(event)"/>
+	<s:Label id="lbHelp" visible="false" left="0" top="0" fontSize="11"
+			 text="use LButton to rotate model"/>	
+</s:Application>

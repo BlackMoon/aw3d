@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2489/trunk/fp10/Away3DLite/src/away3dlite/loaders
+END
+Loader3D.as
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/loaders/Loader3D.as
+END
+Collada.as
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/Collada.as
+END
+Max3DS.as
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/2254/trunk/fp10/Away3DLite/src/away3dlite/loaders/Max3DS.as
+END
+AbstractParser.as
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1829/trunk/fp10/Away3DLite/src/away3dlite/loaders/AbstractParser.as
+END
+AWData.as
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/2489/trunk/fp10/Away3DLite/src/away3dlite/loaders/AWData.as
+END
+MD2.as
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2270/trunk/fp10/Away3DLite/src/away3dlite/loaders/MD2.as
+END
+MQO.as
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/1941/trunk/fp10/Away3DLite/src/away3dlite/loaders/MQO.as
+END

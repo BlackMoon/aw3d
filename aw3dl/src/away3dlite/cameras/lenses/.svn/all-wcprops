@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2118/trunk/fp10/Away3DLite/src/away3dlite/cameras/lenses
+END
+OrthogonalLens.as
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/2118/trunk/fp10/Away3DLite/src/away3dlite/cameras/lenses/OrthogonalLens.as
+END
+AbstractLens.as
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/2118/trunk/fp10/Away3DLite/src/away3dlite/cameras/lenses/AbstractLens.as
+END
+ZoomFocusLens.as
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/2118/trunk/fp10/Away3DLite/src/away3dlite/cameras/lenses/ZoomFocusLens.as
+END
+PerspectiveLens.as
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/2118/trunk/fp10/Away3DLite/src/away3dlite/cameras/lenses/PerspectiveLens.as
+END

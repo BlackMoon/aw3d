@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns='http://earth.google.com/kml/2.1'>
+<Folder>
+    <name>model</name>
+    <description><![CDATA[Created with <a href="http://sketchup.google.com/">Google SketchUp 7.0.1</a>]]></description>
+    <DocumentSource>SketchUp</DocumentSource>
+<visibility>1</visibility>
+<LookAt>
+<heading>165.015</heading>
+<tilt>87.3205</tilt>
+<latitude>55.75242002057666</latitude>
+<longitude>37.62315467643492</longitude>
+<range>62.77569679289365</range>
+<altitude>30.55355931023644</altitude>
+</LookAt>
+<Folder>
+<name>Tour</name>
+<Placemark>
+<name><![CDATA[Home]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>165.015</heading>
+<tilt>87.3205</tilt>
+<latitude>55.75242002057666</latitude>
+<longitude>37.62315467643492</longitude>
+<range>62.77569679289365</range>
+<altitude>30.55355931023644</altitude>
+</LookAt>
+</Placemark>
+<Placemark>
+<name><![CDATA[1.Sud]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>347.423</heading>
+<tilt>43.0507</tilt>
+<latitude>55.75146432488328</latitude>
+<longitude>37.62358611349946</longitude>
+<range>29.90431281528277</range>
+<altitude>155.8094111310936</altitude>
+</LookAt>
+</Placemark>
+<Placemark>
+<name><![CDATA[2.East]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>234.939</heading>
+<tilt>43.0047</tilt>
+<latitude>55.7531428544555</latitude>
+<longitude>37.62466917544266</longitude>
+<range>30.02962718007194</range>
+<altitude>155.8094111310936</altitude>
+</LookAt>
+</Placemark>
+<Placemark>
+<name><![CDATA[3.Nord]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>122.333</heading>
+<tilt>74.7808</tilt>
+<latitude>55.7527941747764</latitude>
+<longitude>37.62229943597903</longitude>
+<range>50.48318535075141</range>
+<altitude>35.72191100860445</altitude>
+</LookAt>
+</Placemark>
+<Placemark>
+<name><![CDATA[4.West]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>54.8507</heading>
+<tilt>74.8005</tilt>
+<latitude>55.75192388757868</latitude>
+<longitude>37.6217204853557</longitude>
+<range>0.02540000002589591</range>
+<altitude>35.72191100860445</altitude>
+</LookAt>
+</Placemark>
+<Placemark>
+<name><![CDATA[5.Plant]]></name>
+<visibility>1</visibility>
+<LookAt>
+<heading>324.9</heading>
+<tilt>9.03814</tilt>
+<latitude>55.75226495592118</latitude>
+<longitude>37.62345137153259</longitude>
+<range>262.8693166928938</range>
+<altitude>500.0000005099998</altitude>
+</LookAt>
+</Placemark>
+</Folder>
+  <Placemark>
+    <name>Model</name>
+    <description><![CDATA[Creato nel marzo-aprile 2008 da Enrico Dalbosco (Arrigo Silva)]]></description>
+    <Style id='default'>
+    </Style>
+    <Model>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <Location>
+            <longitude>37.623133957058</longitude>
+            <latitude>55.752509205148</latitude>
+            <altitude>0.000000000000</altitude>
+        </Location>
+        <Orientation>
+            <heading>-0.000000000000</heading>
+            <tilt>0</tilt>
+            <roll>0</roll>
+        </Orientation>
+        <Scale>
+            <x>1.0</x>
+            <y>1.0</y>
+            <z>1.0</z>
+        </Scale>
+        <Link>
+            <href>models/model.dae</href>
+        </Link>
+    </Model>
+  </Placemark></Folder>
+</kml>

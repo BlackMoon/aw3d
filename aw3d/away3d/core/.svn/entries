@@ -1,0 +1,64 @@
+10
+
+dir
+3318
+http://away3d.googlecode.com/svn/trunk/fp10/Away3D/src/away3d/core
+http://away3d.googlecode.com/svn
+
+
+
+2011-04-07T01:54:28.984671Z
+3126
+rob.bateman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6da1ee2c-932f-0410-8bb4-73b2b089c45a
+
+render
+dir
+
+utils
+dir
+
+session
+dir
+
+filter
+dir
+
+project
+dir
+
+clip
+dir
+
+vos
+dir
+
+geom
+dir
+
+math
+dir
+
+base
+dir
+
+traverse
+dir
+
+stats
+dir
+

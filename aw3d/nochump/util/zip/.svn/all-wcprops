@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip
+END
+ZipErrorEvent.as
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipErrorEvent.as
+END
+ZipConstants.as
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipConstants.as
+END
+ZipFile.as
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipFile.as
+END
+ZipOutput.as
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipOutput.as
+END
+ZipEvent.as
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipEvent.as
+END
+Inflater.as
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/Inflater.as
+END
+ZipEntry.as
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipEntry.as
+END
+Deflater.as
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/Deflater.as
+END
+CRC32.as
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/CRC32.as
+END
+ZipError.as
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1565/trunk/fp10/Away3D/src/nochump/util/zip/ZipError.as
+END
